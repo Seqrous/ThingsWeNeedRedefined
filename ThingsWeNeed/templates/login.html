@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    <title>Login</title>
+{% enblock %}
+
+{% block login %} 
+    <div class='jumbotron'>
+        <form method='POST'>
+            {% bootstrap4_form form %}
+            {% csrf_token %}
+            <input type="submit" value='Login'>
+        </form>
+    </div>
+{% endblock %}

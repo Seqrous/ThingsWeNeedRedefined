@@ -16,8 +16,8 @@ class Address(models.Model):
 class Household(models.Model):
 
     name = models.CharField(max_length=64)
-    address = models.ForeignKey(Address, related_name='address', son_delete=models.CASCADE)
-    members = models.ManyToManyField(UserProfileInfo, through='HouseholdMember', on_delete=models.PROTECT)
+    address = models.ForeignKey(Address, related_name='address', on_delete=models.CASCADE)
+    members = models.ManyToManyField(UserProfileInfo, through='HouseholdMember')
     
     created_by = models.ForeignKey(UserProfileInfo, related_name='creator', on_delete=models.PROTECT)
 
@@ -30,7 +30,7 @@ class Product(models.Model):
 
     name = models.CharField(max_length=64)
     max_price = models.FloatField(blank=True)
-    quantity = models.PositiveIntegerField(max_length=2)
+    quantity = models.PositiveIntegerField()
     info = models.TextField(max_length=256, blank=True)
     is_wish = models.BooleanField()
 
