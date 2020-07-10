@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
 
 {% block page_title %}
     <title>Login</title>
-{% enblock %}
+{% endblock %}
 
-{% block login %} 
+{% block login-register %} 
+<div class='container'>
     <div class='jumbotron'>
+        <h1>Things We Need</h1>
         <form method='POST'>
-            {% bootstrap4_form form %}
             {% csrf_token %}
+            {% bootstrap_form form %}
             <input type="submit" value='Login'>
         </form>
+        <p>
+            <a href="{% url 'signup' %}" class='register-link'>Register here!</a>
+        </p>
     </div>
+</div>
 {% endblock %}
