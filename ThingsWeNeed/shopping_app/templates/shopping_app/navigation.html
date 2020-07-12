@@ -3,11 +3,11 @@
 {% block navigation %}
     <nav role='navbar' class='navbar navbar-expand-lg navbar-light bg-light'>
         <div class='container'>
-            <a class='navbar-brand' href="#">ThingsWeNeed</a>
+            <a class='navbar-brand' href="{% url 'shopping_app:index' %}">ThingsWeNeed</a>
             
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Households</a>
+                    <a class="nav-link" href="{% url 'shopping_app:household_list' %}">Households</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Wishes</a>

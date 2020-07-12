@@ -1,0 +1,24 @@
+{% extends 'shopping_app/navigation.html' %}
+
+{% block content %}
+<div class='container'>
+    <h1>Join a household</h1>
+    <form methods='POST'>
+        {{ form }}
+        {% csrf_token %}
+        <input type="submit" value='Join'>
+    </form>
+    <br>
+
+    {% if household_list %}
+        <ul class='list-group'>
+            {% for household in household_list %}
+                <li class='list-group-item'>{{ household.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h2>You are not a part of any household!</h2>
+    {% endif %}
+    
+</div>
+{% endblock %}
