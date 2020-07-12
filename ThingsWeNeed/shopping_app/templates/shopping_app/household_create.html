@@ -1,0 +1,12 @@
+{% extends 'shopping_app/navigation.html' %}
+{% load bootstrap4 %}
+{% block content %}
+    <div class='container'>
+        <form method='POST'>
+            {% bootstrap_form form_info %}
+            {% bootstrap_form form_address %}
+            {% csrf_token %}
+            <input type="submit" value='Create'>
+        </form>
+    </div>
+{% endblock %}

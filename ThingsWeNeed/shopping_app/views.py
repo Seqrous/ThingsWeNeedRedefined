@@ -1,7 +1,11 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.views.generic import ListView, RedirectView, CreateView, TemplateView
 from . import models
 from . import forms
+from django.contrib import messages
+
+from django.db import IntegrityError
+
 
 # Create your views here.
 
@@ -25,10 +29,57 @@ class HouseholdPageView(ListView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
+
             # process form cleaned data
             # redirect to join_household()
             print('form is valid')
-            return redirect('shopping_app:household_list')
+            return redirect('shopping_app:household_join', kwargs={'slug':self.kwargs.get('slug')})
         
         return render(request, self.template_name, {'form':form})
 
+class CreateHouseholdView(TemplateView):
+    template_name = 'shopping_app/household_create.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'form_info':forms.CreateHouseholdInfoForm, 'form_address':forms.CreateHouseholdAddressForm})
+
+
+    def post(self, request, *args, **kwargs):
+        form_info = forms.CreateHouseholdInfoForm(request.POST)
+        form_address = forms.CreateHouseholdAddressForm(request.POST)
+
+        if (form_info.is_valid() and form_address.is_valid()):
+
+            # Create new instances
+            address = models.Address(
+                country=form_address.cleaned_data['country'], 
+                city=form_address.cleaned_data['city'], 
+                postal_code=form_address.cleaned_data['postal_code']
+            )
+            household = models.Household(name=form_info.cleaned_data['name'], address=address, created_by=request.user)
+            
+            # Save to database
+            address.save()
+            household.save()
+
+            return redirect('shopping_app:household_list')
+        else:
+            return render(request, self.template_name, {'form_info':form_info, 'form_address':form_address})
+
+
+class JoinHousehold(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('shopping_app:household_list')
+
+    def get(self, request, *args, **kwargs):
+        household = get_object_or_404(models.Household, slug=self.kwargs.get('slug'))
+
+        try:
+            models.HouseholdMember.objects.create(user=self.request.user, household=household)
+        except IntegrityError:
+            messages.warning(self.request, "You are already a member")
+        else:
+            messages.success(self.reuqest, "You are not a member")
+
+        return super().get(request, *args, **kwargs)
