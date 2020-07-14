@@ -3,7 +3,7 @@
 {% block content %}
 <div class='container'>
     <h1>Join a household</h1>
-    <form methods='POST'>
+    <form methods='POST' action="{% url 'shopping_app:household_join' %}">
         {{ form }}
         {% csrf_token %}
         <input type="submit" value='Join'>
@@ -13,7 +13,7 @@
     {% if household_list %}
         <ul class='list-group'>
             {% for household in household_list %}
-                <li class='list-group-item'>{{ household.name }}</li>
+                <li class='list-group-item'>{{ household.name }} {{ household.pk }}</li>
             {% endfor %}
         </ul>
     {% else %}

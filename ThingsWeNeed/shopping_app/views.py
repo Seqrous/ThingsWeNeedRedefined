@@ -3,6 +3,7 @@ from django.views.generic import ListView, RedirectView, CreateView, TemplateVie
 from . import models
 from . import forms
 from django.contrib import messages
+from django.utils.text import slugify
 
 from django.db import IntegrityError
 
@@ -59,6 +60,8 @@ class CreateHouseholdView(TemplateView):
             )
             household = models.Household(name=form_info.cleaned_data['name'], address=address, created_by=request.user)
 
+            # Ensure entries do not exist
+            # to implement: handle slug uniquness
             if (not models.Household.objects.filter(name=household.name).exists() and 
                 not models.Address.objects.filter(country=address.country, city=address.city, postal_code=address.postal_code, street_address=address.postal_code).exists()):
             
@@ -79,13 +82,13 @@ class JoinHousehold(RedirectView):
         return reverse('shopping_app:household_list')
 
     def get(self, request, *args, **kwargs):
-        household = get_object_or_404(models.Household, slug=self.kwargs.get('slug'))
+        household = get_object_or_404(models.Household, pk=request.GET['household_id'], slug=slugify(request.GET['household_name']))
 
         try:
             models.HouseholdMember.objects.create(user=self.request.user, household=household)
         except IntegrityError:
             messages.warning(self.request, "You are already a member")
         else:
-            messages.success(self.reuqest, "You are not a member")
+            messages.success(self.request, "You are not a member")
 
         return super().get(request, *args, **kwargs)
