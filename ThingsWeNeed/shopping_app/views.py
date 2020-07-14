@@ -54,15 +54,21 @@ class CreateHouseholdView(TemplateView):
             address = models.Address(
                 country=form_address.cleaned_data['country'], 
                 city=form_address.cleaned_data['city'], 
-                postal_code=form_address.cleaned_data['postal_code']
+                postal_code=form_address.cleaned_data['postal_code'],
+                street_address=form_address.cleaned_data['street_address']
             )
             household = models.Household(name=form_info.cleaned_data['name'], address=address, created_by=request.user)
-            
-            # Save to database
-            address.save()
-            household.save()
 
-            return redirect('shopping_app:household_list')
+            if (not models.Household.objects.filter(name=household.name).exists() and 
+                not models.Address.objects.filter(country=address.country, city=address.city, postal_code=address.postal_code, street_address=address.postal_code).exists()):
+            
+                # Save to database
+                address.save()
+                household.save()
+
+                return redirect('shopping_app:household_list')
+            else:
+                messages.error(request, 'A household with this name or address already exists')
         else:
             return render(request, self.template_name, {'form_info':form_info, 'form_address':form_address})
 

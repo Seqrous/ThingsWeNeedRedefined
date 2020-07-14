@@ -19,4 +19,4 @@ class CreateHouseholdAddressForm(forms.ModelForm):
 
     class Meta():
         model = models.Address
-        fields = ('country', 'city', 'postal_code')
+        fields = ('country', 'city', 'postal_code', 'street_address')

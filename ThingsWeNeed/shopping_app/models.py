@@ -19,9 +19,13 @@ class Address(models.Model):
     country = models.CharField(max_length=64)
     city = models.CharField(max_length=64)
     postal_code = models.CharField(max_length=10)
+    street_address = models.CharField(max_length=255)
+
+    class Meta():
+        unique_together = ('street_address', 'city', 'country')
 
     def __str__(self):
-        return self.city + ", " + self.country + " " + self.postal_code
+        return self.street_address + " " + self.city + ", " + self.country + " " + self.postal_code
 
 class Household(models.Model):
     name = models.CharField(max_length=64, unique=True)
