@@ -32,7 +32,6 @@ class Household(models.Model):
     slug = models.SlugField(allow_unicode=True, unique=True)
     address = models.ForeignKey(Address, related_name='address', on_delete=models.CASCADE)
     members = models.ManyToManyField(User, through='HouseholdMember')
-    
     created_by = models.ForeignKey(User, related_name='creator', on_delete=models.PROTECT)
 
     def __str__(self):

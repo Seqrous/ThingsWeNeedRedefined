@@ -19,13 +19,15 @@ class HouseholdPageView(ListView):
     template_name = 'shopping_app/household_list.html'
 
     def get_queryset(self, *args, **kwargs):
-        # filter by user id
-        households = models.Household.objects.all()
+        current_user = models.User.objects.get(username__iexact=kwargs.get('username'))
+        household_memberships = models.HouseholdMember.objects.prefetch_related('user').filter(user=current_user)
+        household_ids = household_memberships.values_list('household', flat=True)
+        households = models.Household.objects.filter(id__in=household_ids)
         return households
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form':form, 'household_list':self.get_queryset()})
+        return render(request, self.template_name, {'form':form, 'household_list':self.get_queryset(*args, **kwargs)})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -63,13 +65,13 @@ class CreateHouseholdView(TemplateView):
             # Ensure entries do not exist
             # to implement: handle slug uniquness
             if (not models.Household.objects.filter(name=household.name).exists() and 
-                not models.Address.objects.filter(country=address.country, city=address.city, postal_code=address.postal_code, street_address=address.postal_code).exists()):
+                not models.Address.objects.filter(country=address.country, city=address.city, street_address=address.postal_code).exists()):
             
                 # Save to database
                 address.save()
                 household.save()
 
-                return redirect('shopping_app:household_list')
+                return redirect('shopping_app:household_list', kwargs={'username':self.kwargs.get('username')})
             else:
                 messages.error(request, 'A household with this name or address already exists')
         else:
@@ -79,7 +81,7 @@ class CreateHouseholdView(TemplateView):
 class JoinHousehold(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse('shopping_app:household_list')
+        return reverse('shopping_app:household_list', kwargs={'username':self.kwargs.get('username')})
 
     def get(self, request, *args, **kwargs):
         household = get_object_or_404(models.Household, pk=request.GET['household_id'], slug=slugify(request.GET['household_name']))
@@ -89,6 +91,6 @@ class JoinHousehold(RedirectView):
         except IntegrityError:
             messages.warning(self.request, "You are already a member")
         else:
-            messages.success(self.request, "You are not a member")
+            messages.success(self.request, "You are now a member")
 
         return super().get(request, *args, **kwargs)

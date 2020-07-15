@@ -2,24 +2,31 @@
 
 {% block content %}
 <div class='container'>
-    <h1>Join a household</h1>
-    <form methods='POST' action="{% url 'shopping_app:household_join' %}">
-        {{ form }}
-        {% csrf_token %}
-        <input type="submit" value='Join'>
-    </form>
     <br>
-
+    <h2>List of your households:</h2>
+    <br>
     {% if household_list %}
         <ul class='list-group'>
             {% for household in household_list %}
-                <li class='list-group-item'>{{ household.name }} {{ household.pk }}</li>
+                <li class='list-group-item'>{{ household.name }}</li>
             {% endfor %}
         </ul>
     {% else %}
-        <h2>You are not a part of any household!</h2>
+        <h4>You are not a part of any household!</h4>
     {% endif %}
+    <br>
+
+    <div class='jumbotron'>
+        <h2>Join a household</h2>
+        <br>
+        <form methods='POST' action="{% url 'shopping_app:household_join' %}">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="submit" value='Join'>
+        </form>
+    </div>
     
-    <a href="{% url 'shopping_app:household_create' %}">create</a>
+    <h2>Or simply <a href="{% url 'shopping_app:household_create' %}">create </a>one</h2>
+
 </div>
 {% endblock %}
