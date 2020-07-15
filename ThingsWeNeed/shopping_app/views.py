@@ -81,7 +81,7 @@ class CreateHouseholdView(TemplateView):
 class JoinHousehold(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse('shopping_app:household_list', kwargs={'username':self.kwargs.get('username')})
+        return reverse('shopping_app:household_list', kwargs={'username':kwargs.get('username')})
 
     def get(self, request, *args, **kwargs):
         household = get_object_or_404(models.Household, pk=request.GET['household_id'], slug=slugify(request.GET['household_name']))
