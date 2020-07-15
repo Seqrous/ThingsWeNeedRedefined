@@ -71,7 +71,7 @@ class CreateHouseholdView(TemplateView):
                 address.save()
                 household.save()
 
-                return redirect('shopping_app:household_list', kwargs={'username':self.kwargs.get('username')})
+                return redirect(reverse('shopping_app:household_list', kwargs={'username':request.user.username}))
             else:
                 messages.error(request, 'A household with this name or address already exists')
         else:
