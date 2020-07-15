@@ -71,6 +71,12 @@ class CreateHouseholdView(TemplateView):
                 address.save()
                 household.save()
 
+                # Add the creator to the household
+                try:
+                    models.HouseholdMember.objects.create(user=self.request.user, household=household)
+                except IntegrityError:
+                    messages.warning(self.request, 'Something went wrong')
+
                 return redirect(reverse('shopping_app:household_list', kwargs={'username':request.user.username}))
             else:
                 messages.error(request, 'A household with this name or address already exists')
