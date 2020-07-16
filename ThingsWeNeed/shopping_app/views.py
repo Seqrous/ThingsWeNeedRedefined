@@ -127,4 +127,28 @@ class LeaveHousehold(RedirectView):
             messages.success(self.request, 'You have left the group')
         
         return super().get(request, *args, **kwargs)
-            
+
+class AddProduct(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('shopping_app:index')
+
+    def post(self, request, *args, **kwargs):
+        product_form = forms.AddProductForm(request.POST)
+
+        if product_form.is_valid():
+
+            product = models.Product(
+                name = product_form.cleaned_data.get('name'),
+                quantity = product_form.cleaned_data.get('quantity'),
+                max_price = product_form.cleaned_data.get('max_price'),
+                info = product_form.cleaned_data.get('info'),
+                is_wish = product_form.cleaned_data.get('is_wish'),
+                household = models.Household.objects.get(slug=kwargs.get('household_slug')),
+                posted_by = request.user
+            )
+            product.save()
+
+            return redirect(reverse('shopping_app:index'))
+        else:
+            render(request, 'shopping:app:index', {'add_product_form':product_form})

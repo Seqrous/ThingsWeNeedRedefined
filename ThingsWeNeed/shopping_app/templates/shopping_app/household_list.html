@@ -28,7 +28,7 @@
     <div class='jumbotron'>
         <h2>Join a household</h2>
         <br>
-        <form methods='POST' action="{% url 'shopping_app:household_join' username=user.username%}">
+        <form methods='POST' action="{% url 'shopping_app:household_join' username=user.username %}">
             {{ form.as_p }}
             {% csrf_token %}
             <input type="submit" value='Join'>
