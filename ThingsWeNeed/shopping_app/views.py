@@ -13,11 +13,16 @@ from django.db import IntegrityError
 class MainPageView(ListView):
     template_name = 'shopping_app/index.html'
     model = models.Household
+    form_class = forms.AddProductForm
 
     def get_queryset(self, *args, **kwargs):
         current_user = self.request.user
         households = current_user.household_set.all()
         return households
+    
+    def get(self, request, *args, **kwargs):
+        add_product_form = self.form_class()
+        return render(request, self.template_name, {'add_product_form':add_product_form, 'household_list':self.get_queryset(*args, **kwargs)})
 
 class HouseholdPageView(ListView):
     form_class = forms.JoinHouseholdForm

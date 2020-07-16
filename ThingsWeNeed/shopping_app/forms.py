@@ -13,10 +13,23 @@ class CreateHouseholdInfoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['name'].label = "Household's name:"
+        self.fields['name'].label = "Household's name: "
 
 class CreateHouseholdAddressForm(forms.ModelForm):
 
     class Meta():
         model = models.Address
         fields = ('country', 'city', 'postal_code', 'street_address')
+
+class AddProductForm(forms.ModelForm):
+
+    class Meta():
+        model = models.Product
+        fields = ('name', 'quantity', 'max_price', 'info', 'is_wish')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = "Product's name"
+        self.fields['max_price'].label = "Max price"
+        self.fields['info'].label = "Additional information"
+
