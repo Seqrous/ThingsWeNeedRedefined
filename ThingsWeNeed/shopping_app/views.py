@@ -14,15 +14,18 @@ class MainPageView(ListView):
     template_name = 'shopping_app/index.html'
     model = models.Household
 
+    def get_queryset(self, *args, **kwargs):
+        current_user = self.request.user
+        households = current_user.household_set.all()
+        return households
+
 class HouseholdPageView(ListView):
     form_class = forms.JoinHouseholdForm
     template_name = 'shopping_app/household_list.html'
 
     def get_queryset(self, *args, **kwargs):
-        current_user = models.User.objects.get(username__iexact=kwargs.get('username'))
-        household_memberships = models.HouseholdMember.objects.prefetch_related('user').filter(user=current_user)
-        household_ids = household_memberships.values_list('household', flat=True)
-        households = models.Household.objects.filter(id__in=household_ids)
+        current_user = self.request.user
+        households = current_user.household_set.all()
         return households
 
     def get(self, request, *args, **kwargs):

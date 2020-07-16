@@ -9,3 +9,4 @@ class SignUp(CreateView):
 
 class ThanksPage(TemplateView):
     template_name = 'thanks.html'
+
