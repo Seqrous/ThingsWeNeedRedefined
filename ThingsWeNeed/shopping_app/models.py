@@ -46,7 +46,6 @@ class HouseholdMember(models.Model):
     user = models.ForeignKey(User, related_name='member', on_delete=models.CASCADE)
     household = models.ForeignKey(Household, related_name='household', on_delete=models.CASCADE)
 
-
 class Product(models.Model):
 
     name = models.CharField(max_length=64)

@@ -95,12 +95,11 @@ class JoinHousehold(RedirectView):
     def get(self, request, *args, **kwargs):
         household = get_object_or_404(models.Household, pk=request.GET['household_id'], slug=slugify(request.GET['household_name']))
 
-        try:
+        if not request.user in household.members.all():
             models.HouseholdMember.objects.create(user=self.request.user, household=household)
-        except IntegrityError:
-            messages.warning(self.request, "You are already a member")
-        else:
             messages.success(self.request, "You are now a member")
+        else:
+            messages.warning(self.request, "You are already a member")
 
         return super().get(request, *args, **kwargs)
 
