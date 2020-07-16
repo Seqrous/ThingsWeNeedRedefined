@@ -5,7 +5,8 @@ app_name = 'shopping_app'
 
 urlpatterns = [
     path('main/', views.MainPageView.as_view(), name='index'),
-    path('households/<slug:username>', views.HouseholdPageView.as_view(), name='household_list'),
+    path('<slug:username>/households/', views.HouseholdPageView.as_view(), name='household_list'),
     path('households/create/', views.CreateHouseholdView.as_view(), name='household_create'),
-    path('households/<slug:username>/join/', views.JoinHousehold.as_view(), name='household_join')
+    path('<slug:username>/households/join/', views.JoinHousehold.as_view(), name='household_join'),
+    path('<slug:username>/households/leave/<slug:household_slug>/', views.LeaveHousehold.as_view(), name='household_leave' )
 ]

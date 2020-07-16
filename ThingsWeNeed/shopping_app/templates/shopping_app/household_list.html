@@ -8,7 +8,9 @@
     {% if household_list %}
         <ul class='list-group'>
             {% for household in household_list %}
-                <li class='list-group-item'>{{ household.name }}</li>
+                <li class='list-group-item'>
+                    {{ household.name }} <a class='leave-household-a' href="{% url 'shopping_app:household_leave' username=user.username household_slug=household.slug %}">Leave</a>
+                </li>
             {% endfor %}
         </ul>
     {% else %}

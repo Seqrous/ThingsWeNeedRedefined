@@ -100,3 +100,24 @@ class JoinHousehold(RedirectView):
             messages.success(self.request, "You are now a member")
 
         return super().get(request, *args, **kwargs)
+
+class LeaveHousehold(RedirectView):
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('shopping_app:household_list', kwargs={'username':kwargs.get('username')})
+
+    def get(self, request, *args, **kwargs):
+        
+        try:
+            household_member = models.HouseholdMember.objects.filter(
+                user = self.request.user,
+                household__slug = self.kwargs.get('household_slug')
+            ).get()
+        except models.HouseholdMember.DoesNotExist:
+            messages.warning(self.request, 'Sorry, but you are not in this group')
+        else:
+            household_member.delete()
+            messages.success(self.request, 'You have left the group')
+        
+        return super().get(request, *args, **kwargs)
+            
