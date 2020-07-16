@@ -9,7 +9,14 @@
         <ul class='list-group'>
             {% for household in household_list %}
                 <li class='list-group-item'>
-                    {{ household.name }} <a class='leave-household-a' href="{% url 'shopping_app:household_leave' username=user.username household_slug=household.slug %}">Leave</a>
+                    <div class='row'>
+                        <span class='col-md-11'>
+                            {{ household.name }}
+                        </span>
+                        <span class='col-md-1'>
+                            <a class='leave-household-a' href="{% url 'shopping_app:household_leave' username=user.username household_slug=household.slug %}">Leave</a>
+                        </span>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
