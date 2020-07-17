@@ -1,5 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
-from django.views.generic import ListView, RedirectView, CreateView, TemplateView
+from django.urls import reverse_lazy
+
+from django.views.generic import (
+    ListView, RedirectView, 
+    CreateView, TemplateView, DeleteView
+)
+
 from . import models
 from . import forms
 from django.contrib import messages
@@ -152,6 +158,8 @@ class AddProduct(RedirectView):
             return redirect(reverse('shopping_app:index'))
         else:
             render(request, 'shopping:app:index', {'add_product_form':product_form})
-    
-    def get(self, request, *args, **kwargs):
-        print("what the fuck")
+
+class RemoveProduct(DeleteView):
+    model = models.Product
+    success_url = reverse_lazy('shopping_app:index')
+
