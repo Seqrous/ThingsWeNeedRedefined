@@ -9,5 +9,5 @@ urlpatterns = [
     path('households/create/', views.CreateHouseholdView.as_view(), name='household_create'),
     path('<slug:username>/households/join/', views.JoinHousehold.as_view(), name='household_join'),
     path('<slug:username>/households/leave/<slug:household_slug>/', views.LeaveHousehold.as_view(), name='household_leave'),
-    path('<slug:username>/<household_slug>/add-product/', views.AddProduct.as_view(), name='product_add')
+    path('<slug:username>/<slug:household_slug>/add-product/', views.AddProduct.as_view(), name='product_add')
 ]

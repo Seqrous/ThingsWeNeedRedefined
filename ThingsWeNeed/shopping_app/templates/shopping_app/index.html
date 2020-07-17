@@ -30,37 +30,35 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#productModal'>Add product</button>
                     {% else %}
                         <h5>No products in this household</h5>
-                        <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#productModal'>Add product</button>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="productModalLabel">What would you like to add?</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form method='POST' action="{% url 'shopping_app:product_add' username=user.username household_slug=household.slug %}">
-                                        <div class="modal-body">
-                                            {{ add_product_form.as_p }}
-                                            {% csrf_token %}
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" value='Confirm'></input>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                     {% endif %}
+                    <button id="button-modal-{{ user.username }}-{{ household.slug }}" type='button' class='btn btn-primary button-modal' data-toggle='modal' data-target='#productModal'>Add product</button>
                 </div>
             {% endfor %}
+            <!-- Modal -->
+            <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">What would you like to add?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="add-product-form" method='POST' action="">
+                                {% csrf_token %}
+                                {{ add_product_form.as_p }}
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" form='add-product-form' class="btn btn-primary" value='Confirm'></input>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% else %}
             <br>
             <h1>Nothing to see here ¯\_(ツ)_/¯</h1>

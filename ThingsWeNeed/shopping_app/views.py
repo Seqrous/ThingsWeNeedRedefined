@@ -152,3 +152,6 @@ class AddProduct(RedirectView):
             return redirect(reverse('shopping_app:index'))
         else:
             render(request, 'shopping:app:index', {'add_product_form':product_form})
+    
+    def get(self, request, *args, **kwargs):
+        print("what the fuck")
