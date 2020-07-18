@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.views.generic import (
     ListView, RedirectView, 
@@ -16,7 +17,8 @@ from django.db import IntegrityError
 
 # Create your views here.
 
-class MainPageView(ListView):
+class MainPageView(LoginRequiredMixin, ListView):
+    login_url = 'login'
     template_name = 'shopping_app/index.html'
     model = models.Household
     form_class = forms.AddProductForm
@@ -30,7 +32,8 @@ class MainPageView(ListView):
         add_product_form = self.form_class()
         return render(request, self.template_name, {'add_product_form':add_product_form, 'household_list':self.get_queryset(*args, **kwargs)})
 
-class HouseholdPageView(ListView):
+class HouseholdPageView(LoginRequiredMixin, ListView):
+    login_url = 'login'
     form_class = forms.JoinHouseholdForm
     template_name = 'shopping_app/household_list.html'
 
@@ -54,7 +57,8 @@ class HouseholdPageView(ListView):
         
         return render(request, self.template_name, {'form':form})
 
-class CreateHouseholdView(TemplateView):
+class CreateHouseholdView(LoginRequiredMixin, TemplateView):
+    login_url = 'login'
     template_name = 'shopping_app/household_create.html'
 
     def get(self, request, *args, **kwargs):
@@ -98,7 +102,8 @@ class CreateHouseholdView(TemplateView):
             return render(request, self.template_name, {'form_info':form_info, 'form_address':form_address})
 
 
-class JoinHousehold(RedirectView):
+class JoinHousehold(LoginRequiredMixin, RedirectView):
+    login_url = 'login'
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse('shopping_app:household_list', kwargs={'username':kwargs.get('username')})
@@ -114,7 +119,8 @@ class JoinHousehold(RedirectView):
 
         return super().get(request, *args, **kwargs)
 
-class LeaveHousehold(RedirectView):
+class LeaveHousehold(LoginRequiredMixin, RedirectView):
+    login_url = 'login'
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse('shopping_app:household_list', kwargs={'username':kwargs.get('username')})
@@ -134,7 +140,8 @@ class LeaveHousehold(RedirectView):
         
         return super().get(request, *args, **kwargs)
 
-class AddProduct(RedirectView):
+class AddProduct(LoginRequiredMixin, RedirectView):
+    login_url = 'login'
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse('shopping_app:index')
@@ -159,7 +166,8 @@ class AddProduct(RedirectView):
         else:
             render(request, 'shopping:app:index', {'add_product_form':product_form})
 
-class RemoveProduct(DeleteView):
+class RemoveProduct(LoginRequiredMixin, DeleteView):
+    login_url = 'login'
     model = models.Product
     success_url = reverse_lazy('shopping_app:index')
 
