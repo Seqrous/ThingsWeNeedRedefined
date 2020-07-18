@@ -11,39 +11,81 @@
                 <h3>{{ household.name }}</h3>
                 <div class='jumbotron household-jumbotron'>
                     {% if household.products.all %}
-                        <table class="table table-bordered table-striped">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Max Price</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for product in household.products.all %}
-                                    <tr>
-                                    <th scope="row">{{ forloop.counter }}</th>
-                                        <td>{{ product.name }}</td>
-                                        <td>{{ product.quantity }}</td>
-                                        <td>{{ product.max_price }}</td>
-                                        <td>
-                                            <form method='POST' action=''>
-                                                {% csrf_token %}
-                                                <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        {% regroup household.products.all by is_wish as product_wish_list %}
+                        {% for entry_is_wish in product_wish_list|dictsort:"grouper" %}
+                            {% if not entry_is_wish.grouper %}
+                                <h5>Household products</h5>
+                                <!-- table with product -->
+                                <table id="household-products-{{ household.slug }}" class="table table-bordered table-striped">
+                                    <thead id='household-products-thead-{{ household.slug }}' class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Max Price</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in entry_is_wish.list %}
+                                            {% if not product.is_wish %}
+                                                <tr>
+                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                    <td>{{ product.name }}</td>
+                                                    <td>{{ product.quantity }}</td>
+                                                    <td>{{ product.max_price }}</td>
+                                                    <td>
+                                                        <form method='POST' action=''>
+                                                            {% csrf_token %}
+                                                            <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                            <h5>Wishes</h5>
+                                <!-- table with wishes -->
+                                <table id="household-wishes-{{ household.slug }}" class="table table-bordered table-striped">
+                                    <thead id='household-wishes-thead-{{ household.slug }}' class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Max Price</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in entry_is_wish.list %}
+                                            {% if product.is_wish %}
+                                                <tr>
+                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                    <td>{{ product.name }}</td>
+                                                    <td>{{ product.quantity }}</td>
+                                                    <td>{{ product.max_price }}</td>
+                                                    <td>
+                                                        <form method='POST' action=''>
+                                                            {% csrf_token %}
+                                                            <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        {% endfor %}
                     {% else %}
-                        <h5>No products in this household</h5>
+                        <h5>No products or wishes here</h5>
                     {% endif %}
                     <button id="button-modal-{{ user.username }}-{{ household.slug }}" type='button' class='btn btn-primary button-modal' data-toggle='modal' data-target='#productModal'>Add product</button>
                 </div>
             {% endfor %}
+
             <!-- Modal -->
             <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
