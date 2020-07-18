@@ -11,6 +11,7 @@
                 <h3>{{ household.name }}</h3>
                 <div class='jumbotron household-jumbotron'>
                     {% if household.products.all %}
+                        <!-- Group by product/wish -->
                         {% regroup household.products.all by is_wish as product_wish_list %}
                         {% for entry_is_wish in product_wish_list|dictsort:"grouper" %}
                             {% if not entry_is_wish.grouper %}
@@ -82,6 +83,7 @@
                     {% else %}
                         <h5>No products or wishes here</h5>
                     {% endif %}
+                    <!-- Button to trigger the modal -->
                     <button id="button-modal-{{ user.username }}-{{ household.slug }}" type='button' class='btn btn-primary button-modal' data-toggle='modal' data-target='#productModal'>Add product</button>
                 </div>
             {% endfor %}

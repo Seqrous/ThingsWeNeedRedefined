@@ -21,6 +21,7 @@ from . import views
 urlpatterns = [
     path('', include('shopping_app.urls'), name='shopping_app'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', views.SignUp.as_view(), name='signup'),
     path('thanks/', views.ThanksPage.as_view(), name='thanks'),
     path('admin/', admin.site.urls),
