@@ -80,24 +80,31 @@ class CreateHouseholdView(LoginRequiredMixin, TemplateView):
             )
             household = models.Household(name=form_info.cleaned_data['name'], address=address, created_by=request.user)
 
-            # Ensure entries do not exist
-            # to implement: handle slug uniquness
-            if (not models.Household.objects.filter(name=household.name).exists() and 
-                not models.Address.objects.filter(country=address.country, city=address.city, street_address=address.postal_code).exists()):
-            
-                # Save to database
-                address.save()
-                household.save()
+            # Makes sure such name doesn't already exist
+            if not models.Household.objects.filter(slug=slugify(household.name)).exists():
+                # Makes sure such address doesn't already exist
+                if not models.Address.objects.filter(country=address.country, city=address.city, street_address=address.postal_code).exists():
+                    
+                    # Save to database
+                    address.save()
+                    household.save()
 
-                # Add the creator to the household
-                try:
-                    models.HouseholdMember.objects.create(user=self.request.user, household=household)
-                except IntegrityError:
-                    messages.warning(self.request, 'Something went wrong')
+                    # Add the creator to members of a household
+                    try:
+                        models.HouseholdMember.objects.create(user=self.request.user, household=household)
+                    except IntegrityError:
+                        messages.warning(self.request, 'Something went wrong')
+                    
+                    return redirect(reverse('shopping_app:household_list', kwargs={'username':request.user.username}))
+                    
+                else:
+                    messages.error(request, 'There is already a household registered on this address')
+                    return render(request, self.template_name, {'form_info':form_info, 'form_address':form_address})
 
-                return redirect(reverse('shopping_app:household_list', kwargs={'username':request.user.username}))
             else:
-                messages.error(request, 'A household with this name or address already exists')
+                messages.error(request, 'A household with this name already exists')
+                return render(request, self.template_name, {'form_info':form_info, 'form_address':form_address})
+
         else:
             return render(request, self.template_name, {'form_info':form_info, 'form_address':form_address})
 
