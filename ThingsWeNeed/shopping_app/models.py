@@ -49,7 +49,7 @@ class HouseholdMember(models.Model):
 class Product(models.Model):
 
     name = models.CharField(max_length=64)
-    max_price = models.FloatField(blank=True)
+    max_price = models.FloatField(blank=True, null=True)
     quantity = models.PositiveIntegerField()
     info = models.TextField(max_length=256, blank=True)
     is_wish = models.BooleanField()

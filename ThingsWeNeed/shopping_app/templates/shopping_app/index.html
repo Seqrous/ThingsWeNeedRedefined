@@ -12,7 +12,7 @@
                 <div class='jumbotron household-jumbotron'>
                     {% if household.products.all %}
                         <!-- Group by product/wish -->
-                        {% regroup household.products.all by is_wish as product_wish_list %}
+                        {% regroup household.products.all|dictsort:"is_wish" by is_wish as product_wish_list %}
                         {% for entry_is_wish in product_wish_list|dictsort:"grouper" %}
                             {% if not entry_is_wish.grouper %}
                                 <h5>Household products</h5>
