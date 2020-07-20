@@ -28,15 +28,24 @@
     <div class='jumbotron'>
         <div class='row'>
             <div class='col-md-1'></div>
-            <div class='col-md-6'>
+            <div class='col-md-5'>
                 <h2>Join a household</h2>
                 <br>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger">
+                            {{ message|safe }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
                 <form methods='POST' action="{% url 'shopping_app:household_join' username=user.username %}">
                     {{ form.as_p }}
                     {% csrf_token %}
                     <input type="submit" value='Join'>
                 </form>
             </div>
+            <div class='col-md-1'></div>
             <div class='col-md-5'>
                 <h2>Or simply <a href="{% url 'shopping_app:household_create' %}">create </a>one</h2>
             </div>

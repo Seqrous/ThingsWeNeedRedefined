@@ -109,13 +109,27 @@ class JoinHousehold(LoginRequiredMixin, RedirectView):
         return reverse('shopping_app:household_list', kwargs={'username':kwargs.get('username')})
 
     def get(self, request, *args, **kwargs):
-        household = get_object_or_404(models.Household, pk=request.GET['household_id'], slug=slugify(request.GET['household_name']))
+        form = forms.JoinHouseholdForm(request.GET)
 
-        if not request.user in household.members.all():
-            models.HouseholdMember.objects.create(user=self.request.user, household=household)
-            messages.success(self.request, "You are now a member")
+        # form validation
+        if form.is_valid():
+            
+            # look for an object in the database
+            household = None
+            try:
+                household = models.Household.objects.filter(pk=form.cleaned_data.get('household_id'), name=form.cleaned_data.get('household_name')).get()
+            except models.Household.DoesNotExist:
+                messages.error(request, 'Household with such name and id does not exist')
+            
+            # is household exists then try to join
+            if not household is None:
+                if not request.user in household.members.all():
+                    models.HouseholdMember.objects.create(user=self.request.user, household=household)
+                    messages.success(self.request, "You are now a member")
+                else:
+                    messages.warning(self.request, "You are already a member")
         else:
-            messages.warning(self.request, "You are already a member")
+            messages.error(request, 'The provided information is invalid')
 
         return super().get(request, *args, **kwargs)
 
