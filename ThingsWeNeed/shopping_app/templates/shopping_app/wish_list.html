@@ -1,0 +1,11 @@
+{% extends 'shopping_app/navigation.html' %}
+
+{% block content %}
+    <div class='container'>
+        <h1>Wish page</h1>
+
+        {% for wish in wish_list %}
+            <p>{{ wish.name }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

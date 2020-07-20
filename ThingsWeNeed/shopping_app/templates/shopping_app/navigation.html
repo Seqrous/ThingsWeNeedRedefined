@@ -15,7 +15,7 @@
                         <a class="nav-link" href="{% url 'shopping_app:household_list' username=user.username %}">Households</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Wishes</a>
+                        <a class="nav-link" href="{% url 'shopping_app:wish_list' username=user.username %}">Wishes</a>
                     </li>
                 </ul>
 

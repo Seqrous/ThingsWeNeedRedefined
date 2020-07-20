@@ -96,7 +96,7 @@ class CreateHouseholdView(LoginRequiredMixin, TemplateView):
                         messages.warning(self.request, 'Something went wrong')
                     
                     return redirect(reverse('shopping_app:household_list', kwargs={'username':request.user.username}))
-                    
+
                 else:
                     messages.error(request, 'There is already a household registered on this address')
                     return render(request, self.template_name, {'form_info':form_info, 'form_address':form_address})
@@ -192,3 +192,16 @@ class RemoveProduct(LoginRequiredMixin, DeleteView):
     model = models.Product
     success_url = reverse_lazy('shopping_app:index')
 
+class WishPageView(LoginRequiredMixin, ListView):
+    login_url = 'login'
+    template_name = 'shopping_app/wish_list.html'
+    model = models.Product
+
+    def get_queryset(self, *args, **kwargs):
+        current_user = self.request.user
+        wish_list = models.Product.objects.filter(posted_by=current_user, is_wish=True)
+        return wish_list
+
+    def get(self, request, *args, **kwargs):
+        wish_list = self.get_queryset(args, kwargs)
+        return render(request, self.template_name, {'wish_list':wish_list})
