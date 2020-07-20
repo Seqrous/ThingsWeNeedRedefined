@@ -10,9 +10,23 @@
             {% for household in household_list %}
                 <li class='list-group-item'>
                     <div class='row'>
-                        <span class='col-md-11'>
-                            {{ household.name }}
-                        </span>
+                        <div class='col-md-3'>
+                            <address>
+                                <strong>{{ household.name }}</strong>
+                                <br>
+                                {{ household.address.street_address }}
+                                <br>
+                                {{ household.address.city }} {{ household.address.postal_code }}
+                                <br>
+                                {{ household.address.country }}
+                            </address>
+                        </div>
+                        <div class='col-md-8'>
+                            <br>
+                            Created by: {{ household.created_by }}
+                            <br>
+                            Members: {{ household.members.all|length }}
+                        </div>
                         <span class='col-md-1'>
                             <a class='leave-household-a' href="{% url 'shopping_app:household_leave' username=user.username household_slug=household.slug %}">Leave</a>
                         </span>
@@ -33,7 +47,7 @@
                 <br>
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="alert alert-danger">
+                        <div class="alert alert-{{ message.tags }}">
                             {{ message|safe }}
                         </div>
                     {% endfor %}

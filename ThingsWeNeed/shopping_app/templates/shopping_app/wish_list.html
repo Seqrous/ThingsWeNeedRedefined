@@ -4,8 +4,12 @@
     <div class='container'>
         <h1>Wish page</h1>
 
-        {% for wish in wish_list %}
-            <p>{{ wish.name }}</p>
-        {% endfor %}
+        {% if wish_list %}
+            {% for wish in wish_list %}
+                <p>{{ wish.name }}</p>
+            {% endfor %}
+        {% else %}
+            <h2>Unfortunately, you have no wishes yet</h2>
+        {% endif %}
     </div>
 {% endblock %}
