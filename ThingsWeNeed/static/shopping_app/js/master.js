@@ -35,3 +35,12 @@ for (i = 0; i < coll.length; i++) {
     }
   });
 }
+
+$(function () {
+    console.log('aaaaa')
+    $('[data-toggle="popover"]').popover()
+})
+
+$('.popover-dismiss').popover({
+    trigger: 'focus'
+})

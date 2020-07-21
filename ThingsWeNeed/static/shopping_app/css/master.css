@@ -1,8 +1,21 @@
 .jumbotron.household-jumbotron {
-    padding-top: 2em;
+    padding-top: 1em;
     padding-bottom: 2em;
 }
 
+#product-info-button {
+    padding: 0px;
+    border: 0px;
+}
+
+#remove-product-form {
+    display: inline;
+}
+
+#remove-product-form input {
+    margin-bottom: -11px;
+    margin-left: 25px;
+}
 /* COLLAPSIBLE */
 
 /* Style the button that is used to open and close the collapsible content */
@@ -10,7 +23,7 @@
     background-color: #b5b5b5;
     color: #444;
     cursor: pointer;
-    padding: 18px;
+    padding: 12px 18px;
     width: 100%;
     border: 1px solid black;
     border-radius: 10px;
