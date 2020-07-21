@@ -24,6 +24,7 @@
                                             <th scope="col">Name</th>
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Max Price</th>
+                                            <th scope="col">Added by</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -35,7 +36,8 @@
                                                     <td>{{ product.name }}</td>
                                                     <td>{{ product.quantity }}</td>
                                                     <td>{{ product.max_price }}</td>
-                                                    <td>
+                                                    <td>{{ product.posted_by.username }}</td>
+                                                    <td width=40>
                                                         <form method='POST' action=''>
                                                             {% csrf_token %}
                                                             <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
@@ -56,6 +58,7 @@
                                             <th scope="col">Name</th>
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Max Price</th>
+                                            <th scope="col">Added by</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -67,7 +70,8 @@
                                                     <td>{{ product.name }}</td>
                                                     <td>{{ product.quantity }}</td>
                                                     <td>{{ product.max_price }}</td>
-                                                    <td>
+                                                    <td>{{ product.posted_by.username }}</td>
+                                                    <td width=40>
                                                         <form method='POST' action=''>
                                                             {% csrf_token %}
                                                             <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
