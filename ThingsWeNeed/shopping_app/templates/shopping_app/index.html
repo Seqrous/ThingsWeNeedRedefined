@@ -83,6 +83,16 @@
                     {% else %}
                         <h5>No products or wishes here</h5>
                     {% endif %}
+
+                    <button type="button" class="collapsible">Members</button>
+                    <div class="content">
+                        <ul class="list-group list-group-flush">
+                            {% for member in household.members.all %}
+                                <li id='member-list-element' class="list-group-item">{{ member.username }}</li>
+                            {% endfor %}
+                          </ul>
+                    </div>
+                    
                     <!-- Button to trigger the modal -->
                     <button id="button-modal-{{ user.username }}-{{ household.slug }}" type='button' class='btn btn-primary button-modal' data-toggle='modal' data-target='#productModal'>Add product</button>
                 </div>
