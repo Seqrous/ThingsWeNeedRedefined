@@ -21,7 +21,10 @@ class MainPageView(LoginRequiredMixin, ListView):
     login_url = 'login'
     template_name = 'shopping_app/index.html'
     model = models.Household
-    form_class = forms.AddProductForm
+    form_classes = {
+        'add_product_form':forms.AddProductForm,
+        'confirm_purchase_form':forms.ConfirmPurchaseForm,
+    }
 
     def get_queryset(self, *args, **kwargs):
         current_user = self.request.user
@@ -29,8 +32,14 @@ class MainPageView(LoginRequiredMixin, ListView):
         return households
     
     def get(self, request, *args, **kwargs):
-        add_product_form = self.form_class()
-        return render(request, self.template_name, {'add_product_form':add_product_form, 'household_list':self.get_queryset(*args, **kwargs)})
+        add_product_form = self.form_classes.get('add_product_form')
+        confirm_purchase_form = self.form_classes.get('confirm_purchase_form')
+        context = {
+           'add_product_form':add_product_form,
+           'confirm_purchase_form':confirm_purchase_form, 
+           'household_list':self.get_queryset(*args, **kwargs),
+        }
+        return render(request, self.template_name, context)
 
 class HouseholdPageView(LoginRequiredMixin, ListView):
     login_url = 'login'
@@ -184,13 +193,40 @@ class AddProduct(LoginRequiredMixin, RedirectView):
             product.save()
 
             return redirect(reverse('shopping_app:index'))
+
         else:
-            render(request, 'shopping:app:index', {'add_product_form':product_form})
+            render(request, 'shopping_app:index', {'add_product_form':product_form})
 
 class RemoveProduct(LoginRequiredMixin, DeleteView):
     login_url = 'login'
     model = models.Product
     success_url = reverse_lazy('shopping_app:index')
+
+class ConfirmProductPurchase(LoginRequiredMixin, RedirectView):
+    login_url = 'login'
+    
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('shopping_app:index')
+    
+    def get(self, request, *args, **kwargs):
+        form = forms.ConfirmPurchaseForm(request.GET)
+
+        if form.is_valid():
+            actual_price = form.cleaned_data.get('actual_price')
+            print(form.cleaned_data)
+            print(actual_price)
+            pk = self.kwargs.get('pk')
+            try:
+                product = models.Product.objects.get(pk=pk)
+            except models.Product.DoesNotExist:
+                messages.error('This product does not exist')
+            else:
+                product.acutal_price = actual_price
+                product.bought_by = self.request.user
+                product.save()
+        
+        return super().get(request, *args, **kwargs)
+
 
 class WishPageView(LoginRequiredMixin, ListView):
     login_url = 'login'

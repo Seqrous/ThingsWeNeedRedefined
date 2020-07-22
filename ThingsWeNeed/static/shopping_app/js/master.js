@@ -20,6 +20,21 @@ $(".remove-product-button").each(function(index) {
     })
 })
 
+$(".buy-product-button").each(function(index) {
+  $(this).on("click", function() {
+      let buttonId = $(this).attr("id")
+      let user = buttonId.split('-')[1].concat('/')
+      let householdSlug= buttonId.split('-')[2].concat('/')
+      let id = buttonId.split('-')[3]
+      let productId = id.concat('/')
+      redirect = '/'.concat(user, householdSlug, productId, 'confirm-purchase/')
+      form = $("#confirm-purchase-form")
+      form.attr('action', redirect)
+    $("#confirm-purchase-dialog-p").html('Selected item:'.concat(id))
+    $("#confirm-purchase-dialog").show()
+  })
+})
+
 // COLLAPSIBLE
 var coll = document.getElementsByClassName("collapsible");
 var i;

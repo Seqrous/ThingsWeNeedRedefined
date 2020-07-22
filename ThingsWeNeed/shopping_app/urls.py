@@ -11,5 +11,6 @@ urlpatterns = [
     path('<slug:username>/households/leave/<slug:household_slug>/', views.LeaveHousehold.as_view(), name='household_leave'),
     path('<slug:username>/<slug:household_slug>/add-product/', views.AddProduct.as_view(), name='product_add'),
     path('<slug:username>/<slug:household_slug>/<int:pk>/remove/', views.RemoveProduct.as_view(), name='product_remove'),
+    path('<slug:username>/<slug:household_slug>/<int:pk>/confirm-purchase/', views.ConfirmProductPurchase.as_view(), name='product_confirm_purchase'),
     path('<slug:username>/wishes/', views.WishPageView.as_view(), name='wish_list')
 ]

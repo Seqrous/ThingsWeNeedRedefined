@@ -50,10 +50,7 @@
                                                         {% endif %}
                                                     </td>
                                                     <td width=120>
-                                                        <form id='buy-product-form' method='POST' action="">
-                                                            {% csrf_token %}
-                                                            <input id='buy-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
-                                                        </form>
+                                                        <input id='buy-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
                                                         <form id='remove-product-form' method='POST' action=''>
                                                             {% csrf_token %}
                                                             <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' title="Remove product" type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
@@ -100,10 +97,7 @@
                                                         {% endif %}
                                                     </td>
                                                     <td width=120>
-                                                        <form id='buy-product-form' method='POST' action="">
-                                                            {% csrf_token %}
-                                                            <input id='buy-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
-                                                        </form>
+                                                        <input id='buy-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
                                                         <form id='remove-product-form' method='POST' action=''>
                                                             {% csrf_token %}
                                                             <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' title="Remove product" type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
@@ -120,6 +114,15 @@
                         <h5>No products or wishes here</h5>
                     {% endif %}
 
+                    <div id='confirm-purchase-dialog' class='purchase-content'>
+                        <p id='confirm-purchase-dialog-p'></p>
+                        <form id='confirm-purchase-form' method='POST' action="">
+                            {% csrf_token %}
+                            {{ confirm_purchase_form.as_p }}
+                            <input class='btn btn-success' type="submit" value="Confirm">
+                        </form>
+                    </div>
+                    <br>
                     <button type="button" class="collapsible">Members</button>
                     <div class="content">
                         <ul class="list-group list-group-flush">

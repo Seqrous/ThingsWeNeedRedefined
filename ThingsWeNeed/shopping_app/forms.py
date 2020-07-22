@@ -33,3 +33,8 @@ class AddProductForm(forms.ModelForm):
         self.fields['max_price'].label = "Max price"
         self.fields['info'].label = "Additional information"
 
+class ConfirmPurchaseForm(forms.ModelForm):
+
+    class Meta():
+        model = models.Product
+        fields = ('actual_price',)
