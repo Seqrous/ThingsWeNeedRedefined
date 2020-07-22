@@ -13,8 +13,15 @@
 }
 
 #remove-product-form input {
-    margin-bottom: -11px;
-    margin-left: 25px;
+    margin-left: 20px;
+}
+
+#buy-product-form {
+  display: inline;
+}
+
+#buy-product-form input {
+  margin-left: 5px;
 }
 /* COLLAPSIBLE */
 

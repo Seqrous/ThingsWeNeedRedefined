@@ -25,6 +25,7 @@
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Max Price</th>
                                             <th scope="col">Added by</th>
+                                            <th scope="col">Info</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -37,16 +38,22 @@
                                                     <td>{{ product.quantity }}</td>
                                                     <td>{{ product.max_price }}</td>
                                                     <td>{{ product.posted_by.username }}</td>
-                                                    <td width=120>
+                                                    <td width=40>
                                                         {% if product.info|length > 0 %}
                                                             <button id='product-info-button' type='button' class='btn' data-toggle='popover' data-trigger='focus' title='Extra information' data-content="{{ product.info }}">
-                                                                 <img src="{% static 'shopping_app/images/information.png' %}" alt="">
+                                                                <img src="{% static 'shopping_app/images/information.png' %}" alt="">
                                                             </button>
                                                         {% else %}
-                                                            <button style='visibility:hidden' id='product-info-button' type='button' class='btn' data-toggle='popover' data-trigger='focus' title='Extra information' data-content="{{ product.info }}">
+                                                            <button id='product-info-button' type='button' class='btn disabled' title='Extra information'>
                                                                 <img src="{% static 'shopping_app/images/information.png' %}" alt="">
                                                             </button>
                                                         {% endif %}
+                                                    </td>
+                                                    <td width=120>
+                                                        <form id='buy-product-form' method='POST' action="">
+                                                            {% csrf_token %}
+                                                            <input id='buy-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
+                                                        </form>
                                                         <form id='remove-product-form' method='POST' action=''>
                                                             {% csrf_token %}
                                                             <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' title="Remove product" type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
@@ -68,6 +75,7 @@
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Max Price</th>
                                             <th scope="col">Added by</th>
+                                            <th scope="col">Info</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -80,16 +88,22 @@
                                                     <td>{{ product.quantity }}</td>
                                                     <td>{{ product.max_price }}</td>
                                                     <td>{{ product.posted_by.username }}</td>
-                                                    <td width=120>
+                                                    <td width=40>
                                                         {% if product.info|length > 0 %}
                                                             <button id='product-info-button' type='button' class='btn' data-toggle='popover' data-trigger='focus' title='Extra information' data-content="{{ product.info }}">
-                                                                 <img src="{% static 'shopping_app/images/information.png' %}" alt="">
+                                                                <img src="{% static 'shopping_app/images/information.png' %}" alt="">
                                                             </button>
                                                         {% else %}
-                                                            <button style='visibility:hidden' id='product-info-button' type='button' class='btn' data-toggle='popover' data-trigger='focus' title='Extra information' data-content="{{ product.info }}">
+                                                            <button id='product-info-button' type='button' class='btn disabled' title='Extra information'>
                                                                 <img src="{% static 'shopping_app/images/information.png' %}" alt="">
                                                             </button>
                                                         {% endif %}
+                                                    </td>
+                                                    <td width=120>
+                                                        <form id='buy-product-form' method='POST' action="">
+                                                            {% csrf_token %}
+                                                            <input id='buy-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
+                                                        </form>
                                                         <form id='remove-product-form' method='POST' action=''>
                                                             {% csrf_token %}
                                                             <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' title="Remove product" type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">

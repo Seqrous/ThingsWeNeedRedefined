@@ -2,12 +2,35 @@
 
 {% block content %}
     <div class='container'>
+        <br>
         <h1>Your wishes:</h1>
-
+        <br>
         {% if wish_list %}
-            {% for wish in wish_list %}
-                <p>{{ wish.name }}</p>
-            {% endfor %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Your price</th>
+                        <th scope="col">Actual price</th>
+                        <th scope="col">Bought by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for wish in wish_list %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ wish.name }}</td>
+                            <td>{{ wish.quantity}}</td>
+                            <td>{{ wish.max_price }}</td>
+                            <td>{{ wish.actual_price }}</td>
+                            <td>{{ wish.bought_by.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
         {% else %}
             <h2>Unfortunately, you have no wishes yet</h2>
         {% endif %}

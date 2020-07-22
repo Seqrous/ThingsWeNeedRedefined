@@ -50,11 +50,11 @@ class Product(models.Model):
 
     name = models.CharField(max_length=64)
     max_price = models.FloatField(blank=True, null=True)
+    actual_price = models.FloatField(blank=True, null=True)
     quantity = models.PositiveIntegerField()
     info = models.TextField(max_length=256, blank=True)
     is_wish = models.BooleanField()
     household = models.ForeignKey(Household, related_name='products', on_delete=models.CASCADE)
-
     posted_by = models.ForeignKey(User, related_name='poster', on_delete=models.CASCADE)
     bought_by = models.ForeignKey(User, related_name='buyer', null=True, blank=True, on_delete=models.SET_NULL)
 
