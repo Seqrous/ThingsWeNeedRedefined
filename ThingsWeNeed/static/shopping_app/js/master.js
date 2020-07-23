@@ -51,11 +51,25 @@ for (i = 0; i < coll.length; i++) {
   });
 }
 
+// HISTORY COLLAPSIBLE
+let historyColl = $('.history-collapsible')
+historyColl.on("click", function () {
+  let history_content = $(".product-history-content")
+  if (history_content.css("display") === "block") {
+    history_content.css("display", "none")
+    historyColl.html("&#9660")
+  } else {
+    history_content.css("display", "block")
+    historyColl.html("&#9650")
+  }
+})
+
+// POPOVER
 $(function () {
-    console.log('aaaaa')
     $('[data-toggle="popover"]').popover()
 })
 
 $('.popover-dismiss').popover({
     trigger: 'focus'
 })
+
