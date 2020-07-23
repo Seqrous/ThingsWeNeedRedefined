@@ -209,19 +209,17 @@ class ConfirmProductPurchase(LoginRequiredMixin, RedirectView):
         return reverse('shopping_app:index')
     
     def get(self, request, *args, **kwargs):
-        form = forms.ConfirmPurchaseForm(request.GET)
+        form = forms.ConfirmPurchaseForm(request.POST)
 
         if form.is_valid():
             actual_price = form.cleaned_data.get('actual_price')
-            print(form.cleaned_data)
-            print(actual_price)
             pk = self.kwargs.get('pk')
             try:
                 product = models.Product.objects.get(pk=pk)
             except models.Product.DoesNotExist:
                 messages.error('This product does not exist')
             else:
-                product.acutal_price = actual_price
+                product.actual_price = actual_price
                 product.bought_by = self.request.user
                 product.save()
         
