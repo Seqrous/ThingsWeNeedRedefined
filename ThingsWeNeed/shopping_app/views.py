@@ -233,7 +233,7 @@ class WishPageView(LoginRequiredMixin, ListView):
 
     def get_queryset(self, *args, **kwargs):
         current_user = self.request.user
-        wish_list = models.Product.objects.filter(posted_by=current_user, is_wish=True)
+        wish_list = models.Product.objects.filter(posted_by=current_user, is_wish=True).order_by('-pk')
         return wish_list
 
     def get(self, request, *args, **kwargs):

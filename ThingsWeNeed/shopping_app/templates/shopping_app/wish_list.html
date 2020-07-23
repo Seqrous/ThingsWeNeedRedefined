@@ -19,14 +19,26 @@
                 </thead>
                 <tbody>
                     {% for wish in wish_list %}
-                        <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ wish.name }}</td>
-                            <td>{{ wish.quantity}}</td>
-                            <td>{{ wish.max_price }}</td>
-                            <td>{{ wish.actual_price }}</td>
-                            <td>{{ wish.bought_by.name }}</td>
-                        </tr>
+                        {% if wish.bought_by.username|length > 0 %}
+                            <tr class='table-success'>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ wish.name }}</td>
+                                <td>{{ wish.quantity}}</td>
+                                <td>{{ wish.max_price }}</td>
+                                <td>{{ wish.actual_price }}</td>
+                                <td>{{ wish.bought_by.username }}</td>
+                            </tr>
+                        {% else %}
+                            <tr class='table-danger'>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ wish.name }}</td>
+                                <td>{{ wish.quantity}}</td>
+                                <td>{{ wish.max_price }}</td>
+                                <td>{{ wish.actual_price }}</td>
+                                <td>{{ wish.bought_by.username }}</td>
+                            </tr>
+                        {% endif %}
+                        
                     {% endfor %}
                 </tbody>
             </table>
