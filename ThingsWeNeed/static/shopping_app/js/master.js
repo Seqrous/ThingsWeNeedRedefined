@@ -24,14 +24,16 @@ $(".buy-product-button").each(function(index) {
   $(this).on("click", function() {
       let buttonId = $(this).attr("id")
       let user = buttonId.split('-')[1].concat('/')
-      let householdSlug= buttonId.split('-')[2].concat('/')
+      let slug = buttonId.split('-')[2]
+      let householdSlug = slug.concat('/')
       let productId = buttonId.split('-')[3].concat('/')
       let productName = buttonId.split('-')[4]
       redirect = '/'.concat(user, householdSlug, productId, 'confirm-purchase/')
-      form = $("#confirm-purchase-form")
+      formId = "#confirm-purchase-form".concat(slug)
+      form = $("#confirm-purchase-form-".concat(slug))
       form.attr('action', redirect)
-    $("#confirm-purchase-dialog-p").html('Selected item: '.concat(productName))
-    $("#confirm-purchase-dialog").show()
+      $("#confirm-purchase-dialog-p-".concat(slug)).html('Selected item: '.concat(productName))
+      $("#confirm-purchase-dialog-".concat(slug)).show()
   })
 })
 

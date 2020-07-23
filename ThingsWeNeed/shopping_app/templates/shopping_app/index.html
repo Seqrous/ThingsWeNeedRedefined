@@ -161,9 +161,9 @@
                         <h5>No wishes or products in this household</h5>
                     {% endif %}
 
-                    <div id='confirm-purchase-dialog' class='purchase-content'>
-                        <p id='confirm-purchase-dialog-p'></p>
-                        <form id='confirm-purchase-form' method='POST' action="">
+                    <div id='confirm-purchase-dialog-{{ household.slug }}' class='purchase-content'>
+                        <p id='confirm-purchase-dialog-p-{{ household.slug }}'></p>
+                        <form id='confirm-purchase-form-{{ household.slug }}' method='POST' action="">
                             {% csrf_token %}
                             {{ confirm_purchase_form.as_p }}
                             <input class='btn btn-success' type="submit" value="Confirm">
