@@ -63,7 +63,7 @@
                             <h5>There are no pending products</h5>
                         {% endif %}
                         <!-- BOUGHT PRODUCTS / HISTORY  -->
-                        <div class='product-history-content'>
+                        <div id="{{ household.slug }}-history-content" class='product-history-content'>
                             <h5>Product history</h5>
                             {% if household.products.all|products:"bought"|length > 0 %}
                                 <table id="household-product-history-{{ household.slug }}" class="table table-bordered">
@@ -106,7 +106,7 @@
                                 <p><strong>No history</strong></p>
                             {% endif %}
                         </div>
-                        <button type='button' class='history-collapsible'>&#9660</button>       
+                        <button type='button' id="{{ household.slug }}-history" class='history-collapsible'>&#9660</button>       
                         
                         <!-- WISHES -->
                         {% if household.products.all|products:"wishes"|length > 0 %}
@@ -160,7 +160,8 @@
                     {% else %}
                         <h5>No wishes or products in this household</h5>
                     {% endif %}
-
+                    
+                    <!-- PURCHASE FORM -->
                     <div id='confirm-purchase-dialog-{{ household.slug }}' class='purchase-content'>
                         <p id='confirm-purchase-dialog-p-{{ household.slug }}'></p>
                         <form id='confirm-purchase-form-{{ household.slug }}' method='POST' action="">
@@ -169,6 +170,8 @@
                             <input class='btn btn-success' type="submit" value="Confirm">
                         </form>
                     </div>
+
+                    <!-- MEMBER LIST -->
                     <button type="button" class="collapsible">Members</button>
                     <div class="content">
                         <ul class="list-group list-group-flush">

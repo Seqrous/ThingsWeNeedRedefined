@@ -55,16 +55,22 @@ for (i = 0; i < coll.length; i++) {
 
 // HISTORY COLLAPSIBLE
 let historyColl = $('.history-collapsible')
-historyColl.on("click", function () {
-  let history_content = $(".product-history-content")
-  if (history_content.css("display") === "block") {
-    history_content.css("display", "none")
-    historyColl.html("&#9660")
-  } else {
-    history_content.css("display", "block")
-    historyColl.html("&#9650")
-  }
+historyColl.each(function(index) {
+  $(this).on("click", function () {
+    let collId = $(this).attr("id")
+    let householdSlug = collId.split("-")[0]
+    let history_content = $("#".concat(householdSlug, "-history-content"))
+
+    if (history_content.css("display") === "block") {
+      history_content.css("display", "none")
+      $(this).html("&#9660")
+    } else {
+      history_content.css("display", "block")
+      $(this).html("&#9650")
+    }
+  })
 })
+
 
 // POPOVER
 $(function () {
