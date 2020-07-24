@@ -35,7 +35,7 @@ class Household(models.Model):
     created_by = models.ForeignKey(User, related_name='creator', on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.name
+        return str(self.pk) + " " + self.name
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
