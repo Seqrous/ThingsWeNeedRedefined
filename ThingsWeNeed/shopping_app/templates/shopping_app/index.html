@@ -9,14 +9,14 @@
         <!-- Household/product table -->
         {% if household_list %}
             {% for household in household_list %}
-                <h3>{{ household.name }}</h3>
+                <h3 id='household-name'>{{ household.name }}</h3>
                 <div class='jumbotron household-jumbotron'>
                     <!-- Check if there are any items -->
                     {% if household.products.all %}
 
                         <!-- PENDING PRODUCTS -->
                         {% if household.products.all|products:"pending"|length > 0 %}
-                            <h5>Household products</h5>
+                            <h5 class='category-heading'><strong>Household products</strong></h5>
                             <table id="household-products-{{ household.slug }}" class="table table-bordered table-striped">
                                 <thead id='household-products-thead-{{ household.slug }}' class="thead-dark">
                                     <tr>
@@ -60,11 +60,12 @@
                                 </tbody>
                             </table>
                         {% else %}
-                            <h5>There are no pending products</h5>
+                            <h5><i>There are no pending products</i></h5>
                         {% endif %}
+                        <hr>
                         <!-- BOUGHT PRODUCTS / HISTORY  -->
+                        <h5 class="category-heading"><strong>Product history</strong></h5>
                         <div id="{{ household.slug }}-history-content" class='product-history-content'>
-                            <h5>Product history</h5>
                             {% if household.products.all|products:"bought"|length > 0 %}
                                 <table id="household-product-history-{{ household.slug }}" class="table table-bordered">
                                     <thead class="thead-dark">
@@ -103,14 +104,15 @@
                                     </tbody>
                                 </table>
                             {% else %}
-                                <p><strong>No history</strong></p>
+                                <h5><strong>It's empty</strong></h5>
                             {% endif %}
                         </div>
-                        <button type='button' id="{{ household.slug }}-history" class='history-collapsible'>&#9660</button>       
+                        <button type='button' id="{{ household.slug }}-history" class='history-collapsible'>&#9660</button>
+                        <hr>
                         
                         <!-- WISHES -->
                         {% if household.products.all|products:"wishes"|length > 0 %}
-                            <h5>Wishes</h5>
+                            <h5 class="category-heading"><strong>Wishes</strong></h5>
                             <!-- table with wishes -->
                             <table id="household-wishes-{{ household.slug }}" class="table table-bordered table-striped">
                                 <thead id='household-wishes-thead-{{ household.slug }}' class="thead-dark">
@@ -155,11 +157,12 @@
                                 </tbody>
                             </table>
                         {% else %}
-                            <h5>There are no pending wishes</h5>
+                            <h5><i>There are no pending wishes</i></h5>
                         {% endif %}
                     {% else %}
-                        <h5>No wishes or products in this household</h5>
+                        <h5><i>No wishes or products in this household</i></h5>
                     {% endif %}
+                    <hr>
                     
                     <!-- PURCHASE FORM -->
                     <div id='confirm-purchase-dialog-{{ household.slug }}' class='purchase-content'>
@@ -211,7 +214,12 @@
             </div>
         {% else %}
             <br>
-            <h1>Nothing to see here ¯\_(ツ)_/¯</h1>
+            <div id="no-household-alert" class='alert alert-info' role='alert'>
+                <h4 class='alert-heading'>No households!</h4>
+                <p>Unfortunately, you are not a member of any household. There is nothing to display.</p>
+                <hr>
+                <p>Please join or create a new household in the <a href="{% url 'shopping_app:household_list' username=user.username %}">Household</a> tab.</p>
+            </div>
         {% endif %}
     </div>
 {% endblock %}
