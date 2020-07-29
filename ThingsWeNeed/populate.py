@@ -36,6 +36,8 @@ USER_LIST = []
 HOUSEHOLD_LIST = []
 
 def populate_user(n_users=20):
+    """ Populate User table """
+    
     for i in range(n_users):
         print(f'New user ({i+1}/{n_users})')
         username = fake.name
@@ -50,6 +52,8 @@ def populate_user(n_users=20):
         USER_LIST.append(new_user)
 
 def populate_household(n_households=7):
+    """ Populate Household table """
+
     for i in range(n_households):
         print(f'New household ({i+1}/{n_households})')
         name = HOUSEHOLD_NAMES[i]
@@ -70,6 +74,8 @@ def populate_household(n_households=7):
         HOUSEHOLD_LIST.append(new_household)
 
 def populate_household_member():
+    """ Populate HouseholdMember table """
+
     for i, household in enumerate(HOUSEHOLD_LIST):
         print(f'New household membership ({i+1}/{len(HOUSEHOLD_LIST)})')
         # Make the creator a member
@@ -90,6 +96,8 @@ def populate_household_member():
             membership.save()
 
 def populate_product(n_products=80):
+    """ Populate Product table """
+    
     for i in range(n_products):
         print(f'New product ({i+1}/{n_products})')
         name = PRODUCT_NAMES[i]
@@ -98,10 +106,11 @@ def populate_product(n_products=80):
         quantity = random.randint(1, 20)
         info = fake.catch_phrase() if random.randint(0, 1) == 1 else ""
         is_wish = True if random.randint(0, 1) == 1 else False
-        household = HOUSEHOLD_LIST[random.randint(0, len(HOUSEHOLD_LIST)-1)]
-        posted_by = USER_LIST[random.randint(0, len(USER_LIST)-1)]
+        posted_by = random.choice([user for user in USER_LIST if len(user.household_set.all()) > 0])
+        household = posted_by.household_set.all()[random.randint(0, len(posted_by.household_set.all())-1)]
         bought_by = USER_LIST[random.randint(0, len(USER_LIST)-1)] if random.randint(0, 1) == 1 else None
 
+        # !!!!!!!! fix for adding products only to households where posters are members
         new_product = models.Product.objects.get_or_create(
             name = name, max_price = max_price,
             actual_price = actual_price, quantity=quantity,
