@@ -30,7 +30,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {% for product in household.products.all|products:"pending" %}
+                                {% for product in household.products.all|products:"pending"|reverse %}
                                     <tr>
                                         <th scope="row">{{ forloop.counter }}</th>
                                         <td>{{ product.name }}</td>
@@ -127,7 +127,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {% for product in household.products.all|products:"wishes" %}
+                                {% for product in household.products.all|products:"wishes"|reverse %}
                                     <tr>
                                         <th scope="row">{{ forloop.counter }}</th>
                                         <td>{{ product.name }}</td>
@@ -147,10 +147,12 @@
                                         </td>
                                         <td width=120>
                                             <input id='buy-{{ user.username }}-{{ household.slug }}-{{ product.id }}-{{ product.name }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
-                                            <form id='remove-product-form' method='POST' action=''>
-                                                {% csrf_token %}
-                                                <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' title="Remove product" type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
-                                            </form>
+                                            {% if product.posted_by == user %}
+                                                <form id='remove-product-form' method='POST' action=''>
+                                                    {% csrf_token %}
+                                                    <input id='remove-{{ user.username }}-{{ household.slug }}-{{ product.id }}' class='remove-product-button' title="Remove product" type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
+                                                </form>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
