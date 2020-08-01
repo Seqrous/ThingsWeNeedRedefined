@@ -1,0 +1,70 @@
+{% extends 'shopping_app/navigation.html' %}
+
+{% block content %}
+<div class='container'>
+    <br>
+    <h2>List of your households:</h2>
+    <br>
+    {% if household_list %}
+        <ul class='list-group'>
+            {% for household in household_list %}
+                <li class='list-group-item'>
+                    <div class='row'>
+                        <div class='col-md-3'>
+                            <address>
+                                <strong>{{ household.name }}#{{ household.pk }}</strong>
+                                <br>
+                                {{ household.address.street_address }}
+                                <br>
+                                {{ household.address.city }} {{ household.address.postal_code }}
+                                <br>
+                                {{ household.address.country }}
+                            </address>
+                        </div>
+                        <div class='col-md-8'>
+                            <br>
+                            Created by: {{ household.created_by }}
+                            <br>
+                            Members: {{ household.members.all|length }}
+                        </div>
+                        <span class='col-md-1'>
+                            <a class='leave-household-a' href="{% url 'shopping_app:household_leave' username=user.username household_slug=household.slug %}">Leave</a>
+                        </span>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h4>You are not a part of any household!</h4>
+    {% endif %}
+    <br>
+
+    <div class='jumbotron'>
+        <div class='row'>
+            <div class='col-md-1'></div>
+            <div class='col-md-5'>
+                <h2>Join a household</h2>
+                <br>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message|safe }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form methods='POST' action="{% url 'shopping_app:household_join' username=user.username %}">
+                    {{ form.as_p }}
+                    {% csrf_token %}
+                    <input type="submit" value='Join'>
+                </form>
+            </div>
+            <div class='col-md-1'></div>
+            <div class='col-md-5'>
+                <h2>Or simply <a href="{% url 'shopping_app:household_create' %}">create </a>one</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

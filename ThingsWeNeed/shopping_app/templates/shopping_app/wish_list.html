@@ -1,0 +1,55 @@
+{% extends 'shopping_app/navigation.html' %}
+
+{% block content %}
+    <div class='container'>
+        <br>
+        <h1>Your wishes:</h1>
+        <br>
+        {% if wish_list %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Household</th>
+                        <th scope="col">Your price</th>
+                        <th scope="col">Actual price</th>
+                        <th scope="col">Bought by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for wish in wish_list %}
+                        {% if wish.bought_by.username|length > 0 %}
+                            <tr class='table-success'>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ wish.name }}</td>
+                                <td>{{ wish.quantity}}</td>
+                                <td>{{ wish.household.name }}</td>
+                                <td>{{ wish.max_price }}</td>
+                                <td>{{ wish.actual_price }}</td>
+                                <td>{{ wish.bought_by.username }}</td>
+                            </tr>
+                        {% else %}
+                            <tr class='table-danger'>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ wish.name }}</td>
+                                <td>{{ wish.quantity}}</td>
+                                <td>{{ wish.household.name }}</td>
+                                <td>{{ wish.max_price }}</td>
+                                <td>{{ wish.actual_price }}</td>
+                                <td>{{ wish.bought_by.username }}</td>
+                            </tr>
+                        {% endif %}
+                        
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        {% else %}
+            <div class="alert alert-info">
+                <h3>Unfortunately, you have no wishes yet</h3>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'shopping_app/navigation.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    
+    <div class='container'>
+        <br>
+        <!-- Household/product table -->
+        {% if household_list %}
+            {% for household in household_list %}
+                <h3 id='household-name'>{{ household.name }}</h3>
+                <div class='jumbotron household-jumbotron'>
+                    <!-- Check if there are any items -->
+                    {% if household.products.all %}
+
+                        <!-- PENDING PRODUCTS -->
+                        {% if household.products.all|products:"pending"|length > 0 %}
+                            <h5 class='category-heading'><strong>Household products</strong></h5>
+                            <table id="household-products_{{ household.slug }}" class="table table-bordered table-striped">
+                                <thead id='household-products-thead_{{ household.slug }}' class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Max Price</th>
+                                        <th scope="col">Added by</th>
+                                        <th scope="col">Info</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in household.products.all|products:"pending"|reverse %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ product.name }}</td>
+                                        <td>{{ product.quantity }}</td>
+                                        <td>{{ product.max_price }}</td>
+                                        <td>{{ product.posted_by.username }}</td>
+                                        <td width=40>
+                                            {% if product.info|length > 0 %}
+                                                <button id='product-info-button' type='button' class='btn' data-toggle='popover' data-trigger='focus' title='Extra information' data-content="{{ product.info }}">
+                                                    <img src="{% static 'shopping_app/images/information.png' %}" alt="">
+                                                </button>
+                                            {% else %}
+                                                <button id='product-info-button' type='button' class='btn disabled' title='Extra information'>
+                                                    <img src="{% static 'shopping_app/images/information.png' %}" alt="">
+                                                </button>
+                                            {% endif %}
+                                        </td>
+                                        <td width=120>
+                                            <input id='buy_{{ user.username }}_{{ household.slug }}_{{ product.id }}_{{ product.name }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
+                                            <form id='remove-product-form' method='POST' action=''>
+                                                {% csrf_token %}
+                                                <input id='remove_{{ user.username }}_{{ household.slug }}_{{ product.id }}' class='remove-product-button' title="Remove product" type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h5><i>There are no pending products</i></h5>
+                        {% endif %}
+                        <hr>
+                        <!-- BOUGHT PRODUCTS / HISTORY  -->
+                        <h5 class="category-heading"><strong>Product history</strong></h5>
+                        <div id="{{ household.slug }}_history-content" class='product-history-content'>
+                            {% if household.products.all|products:"bought"|length > 0 %}
+                                <table id="household-product-history_{{ household.slug }}" class="table table-bordered">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Max Price</th>
+                                            <th scope="col">Actual Price</th>
+                                            <th scope="col">Added By</th>
+                                            <th scope="col">Bought By</th>
+                                            <th scope="col">Info</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for product in household.products.all|products:"bought"|reverse %}
+                                        <tr>
+                                            <th scope="row">{{ product.name }}</th>
+                                            <td>{{ product.quantity }}</td>
+                                            <td>{{ product.max_price }}</td>
+                                            <td>{{ product.actual_price }}</td>
+                                            <td>{{ product.posted_by.username }}</td>
+                                            <td>{{ product.bought_by.username }}</td>
+                                            <td width=40>
+                                                {% if product.info|length > 0 %}
+                                                    <button id='product-info-button' type='button' class='btn' data-toggle='popover' data-trigger='focus' title='Extra information' data-content="{{ product.info }}">
+                                                        <img src="{% static 'shopping_app/images/information.png' %}" alt="">
+                                                    </button>
+                                                {% else %}
+                                                    <button id='product-info-button' type='button' class='btn disabled' title='Extra information'>
+                                                        <img src="{% static 'shopping_app/images/information.png' %}" alt="">
+                                                    </button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <h5><strong>It's empty</strong></h5>
+                            {% endif %}
+                        </div>
+                        <button type='button' id="{{ household.slug }}_history" class='history-collapsible'>&#9660</button>
+                        <hr>
+                        
+                        <!-- WISHES -->
+                        {% if household.products.all|products:"wishes"|length > 0 %}
+                            <h5 class="category-heading"><strong>Wishes</strong></h5>
+                            <!-- table with wishes -->
+                            <table id="household-wishes_{{ household.slug }}" class="table table-bordered table-striped">
+                                <thead id='household-wishes-thead_{{ household.slug }}' class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Max Price</th>
+                                        <th scope="col">Added by</th>
+                                        <th scope="col">Info</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in household.products.all|products:"wishes"|reverse %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ product.name }}</td>
+                                        <td>{{ product.quantity }}</td>
+                                        <td>{{ product.max_price }}</td>
+                                        <td>{{ product.posted_by.username }}</td>
+                                        <td width=40>
+                                            {% if product.info|length > 0 %}
+                                                <button id='product-info-button' type='button' class='btn' data-toggle='popover' data-trigger='focus' title='Extra information' data-content="{{ product.info }}">
+                                                    <img src="{% static 'shopping_app/images/information.png' %}" alt="">
+                                                </button>
+                                            {% else %}
+                                                <button id='product-info-button' type='button' class='btn disabled' title='Extra information'>
+                                                    <img src="{% static 'shopping_app/images/information.png' %}" alt="">
+                                                </button>
+                                            {% endif %}
+                                        </td>
+                                        <td width=120>
+                                            <input id='buy_{{ user.username }}_{{ household.slug }}_{{ product.id }}_{{ product.name }}' class='buy-product-button' title="Buy product" type='image' src="{% static 'shopping_app/images/check-icon.png' %}" alt="check-icon">
+                                            {% if product.posted_by == user %}
+                                                <form id='remove-product-form' method='POST' action=''>
+                                                    {% csrf_token %}
+                                                    <input id='remove_{{ user.username }}_{{ household.slug }}_{{ product.id }}' class='remove-product-button' title="Remove product" type='image' src="{% static 'shopping_app/images/bin-icon.png' %}" alt="bin-icon">
+                                                </form>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h5><i>There are no pending wishes</i></h5>
+                        {% endif %}
+                    {% else %}
+                        <h5><i>No wishes or products in this household</i></h5>
+                    {% endif %}
+                    <hr>
+                    
+                    <!-- PURCHASE FORM -->
+                    <div id='confirm-purchase-dialog_{{ household.slug }}' class='purchase-content'>
+                        <p id='confirm-purchase-dialog-p_{{ household.slug }}'></p>
+                        <form id='confirm-purchase-form_{{ household.slug }}' method='POST' action="">
+                            {% csrf_token %}
+                            {{ confirm_purchase_form.as_p }}
+                            <input class='btn btn-success' type="submit" value="Confirm">
+                        </form>
+                    </div>
+
+                    <!-- MEMBER LIST -->
+                    <button type="button" class="collapsible">Members</button>
+                    <div class="content">
+                        <ul class="list-group list-group-flush">
+                            {% for member in household.members.all %}
+                                <li id='member-list-element' class="list-group-item">{{ member.username }}</li>
+                            {% endfor %}
+                          </ul>
+                    </div>
+                    
+                    <!-- Button to trigger the modal -->
+                    <button id="button-modal_{{ user.username }}_{{ household.slug }}" type='button' class='btn btn-primary button-modal' data-toggle='modal' data-target='#productModal'>Add product</button>
+                </div>
+            {% endfor %}
+
+            <!-- Modal -->
+            <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">What would you like to add?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="add-product-form" method='POST' action="">
+                                {% csrf_token %}
+                                {{ add_product_form.as_p }}
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" form='add-product-form' class="btn btn-primary" value='Confirm'></input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <br>
+            <div id="no-household-alert" class='alert alert-info' role='alert'>
+                <h4 class='alert-heading'>No households!</h4>
+                <p>Unfortunately, you are not a member of any household. There is nothing to display.</p>
+                <hr>
+                <p>Please join or create a new household in the <a href="{% url 'shopping_app:household_list' username=user.username %}">Household</a> tab.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
