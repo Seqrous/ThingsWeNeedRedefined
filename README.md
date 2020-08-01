@@ -1,6 +1,6 @@
 # ThingsWeNeedRedefined
 
-This is an attempt of recreating my 2nd semester school project. It is also my first Django based project.
+This is an attempt of recreating ThingsWeNeed project from my 3rd semester school project. It is also my first Django based project.
 
 ## How to set it up:
 
