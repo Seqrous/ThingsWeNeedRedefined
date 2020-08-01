@@ -1,8 +1,8 @@
 $(".button-modal").each(function(index) {
     $(this).on("click", function() {
         let buttonId = $(this).attr("id")
-        let householdSlug = buttonId.split("-")[3].concat('/')
-        let user = buttonId.split("-")[2].concat('/')
+        let householdSlug = buttonId.split("_")[2].concat('/')
+        let user = buttonId.split("_")[1].concat('/')
         let redirect = '/'.concat(user, householdSlug, "add-product/")
         $("#add-product-form").attr("action", redirect)
     })
@@ -11,9 +11,9 @@ $(".button-modal").each(function(index) {
 $(".remove-product-button").each(function(index) {
     $(this).on("click", function() {
         let buttonId = $(this).attr("id")
-        let user = buttonId.split('-')[1].concat('/')
-        let householdSlug= buttonId.split('-')[2].concat('/')
-        let productId = buttonId.split('-')[3].concat('/')
+        let user = buttonId.split('_')[1].concat('/')
+        let householdSlug= buttonId.split('_')[2].concat('/')
+        let productId = buttonId.split('_')[3].concat('/')
         redirect = '/'.concat(user, householdSlug, productId, 'remove/')
         form = $(this).parent()
         form.attr('action', redirect)
@@ -23,17 +23,16 @@ $(".remove-product-button").each(function(index) {
 $(".buy-product-button").each(function(index) {
   $(this).on("click", function() {
       let buttonId = $(this).attr("id")
-      let user = buttonId.split('-')[1].concat('/')
-      let slug = buttonId.split('-')[2]
+      let user = buttonId.split('_')[1].concat('/')
+      let slug = buttonId.split('_')[2]
       let householdSlug = slug.concat('/')
-      let productId = buttonId.split('-')[3].concat('/')
-      let productName = buttonId.split('-')[4]
+      let productId = buttonId.split('_')[3].concat('/')
+      let productName = buttonId.split('_')[4]
       redirect = '/'.concat(user, householdSlug, productId, 'confirm-purchase/')
-      formId = "#confirm-purchase-form".concat(slug)
-      form = $("#confirm-purchase-form-".concat(slug))
+      form = $("#confirm-purchase-form_".concat(slug))
       form.attr('action', redirect)
-      $("#confirm-purchase-dialog-p-".concat(slug)).html('Selected item: '.concat(productName))
-      $("#confirm-purchase-dialog-".concat(slug)).show()
+      $("#confirm-purchase-dialog-p_".concat(slug)).html('Selected item: '.concat(productName))
+      $("#confirm-purchase-dialog_".concat(slug)).show()
   })
 })
 
@@ -58,8 +57,8 @@ let historyColl = $('.history-collapsible')
 historyColl.each(function(index) {
   $(this).on("click", function () {
     let collId = $(this).attr("id")
-    let householdSlug = collId.split("-")[0]
-    let history_content = $("#".concat(householdSlug, "-history-content"))
+    let householdSlug = collId.split("_")[0]
+    let history_content = $("#".concat(householdSlug, "_history-content"))
 
     if (history_content.css("display") === "block") {
       history_content.css("display", "none")

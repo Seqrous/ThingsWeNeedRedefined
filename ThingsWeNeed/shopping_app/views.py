@@ -73,7 +73,6 @@ class CreateHouseholdView(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {'form_info':forms.CreateHouseholdInfoForm, 'form_address':forms.CreateHouseholdAddressForm})
 
-
     def post(self, request, *args, **kwargs):
         form_info = forms.CreateHouseholdInfoForm(request.POST)
         form_address = forms.CreateHouseholdAddressForm(request.POST)
@@ -116,7 +115,6 @@ class CreateHouseholdView(LoginRequiredMixin, TemplateView):
 
         else:
             return render(request, self.template_name, {'form_info':form_info, 'form_address':form_address})
-
 
 class JoinHousehold(LoginRequiredMixin, RedirectView):
     login_url = 'login'

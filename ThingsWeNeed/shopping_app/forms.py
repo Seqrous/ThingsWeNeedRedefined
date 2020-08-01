@@ -15,6 +15,12 @@ class CreateHouseholdInfoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['name'].label = "Household's name: "
 
+    def clean_name(self):
+        data = self.cleaned_data['name']
+        if '@' in data or '-' in data or '_' in data or '|' in data:
+           raise forms.ValidationError("Housheold name should not include characters such as: '- _ @ or |.", code='invalid')
+        return data
+
 class CreateHouseholdAddressForm(forms.ModelForm):
 
     class Meta():
